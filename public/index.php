@@ -45,7 +45,7 @@ require __DIR__.'/../vendor/autoload.php';
 */
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
-
+Header("location: index.html");
 $kernel = $app->make(Kernel::class);
 
 $response = tap($kernel->handle(
@@ -53,5 +53,3 @@ $response = tap($kernel->handle(
 ))->send();
 
 $kernel->terminate($request, $response);
-
-header("Location: index.html");
