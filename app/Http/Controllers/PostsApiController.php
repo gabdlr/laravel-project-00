@@ -9,6 +9,10 @@ class PostsApiController extends Controller
     {
         return Post::All();
     }
+    // public function index(Request $request)
+    // {
+    //     return Post::All();
+    // }
 
     public function save()
     {
