@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return Header("Location: /index.html");
+    return Header("Location: https://gabtestlaravelapp.herokuapp.com/index.html");
 });
