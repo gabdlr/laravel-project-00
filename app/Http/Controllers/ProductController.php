@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-use App\Models\Notes;
+use App\Models\Products;
 
-class NotesController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +13,7 @@ class NotesController extends Controller
      */
     public function index()
     {
-        //get all notes
-        return Notes::All();
+        return Products::all();
     }
 
     /**
@@ -26,12 +24,15 @@ class NotesController extends Controller
      */
     public function store(Request $request)
     {
-        //create a note
         $request->validate([
-            'title'=>'required',
-            'content'=>'required'
+            'name' => 'required',
+            'slug' => 'required',
+            'price' => 'required|numeric',
+            'imgurl' => 'required'
         ]);
-        return Notes::Create($request->all());
+        return Products::create(
+            $request->all()
+        );
     }
 
     /**
@@ -42,7 +43,7 @@ class NotesController extends Controller
      */
     public function show($id)
     {
-        return Notes::find($id);
+        return Products::find($id);
     }
 
     /**
@@ -54,10 +55,9 @@ class NotesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //update a note
-        $note = Notes::find($id);
-        $note->update($request->all());
-        return $note;
+        $product = Products::find($id);
+        $product->update($request->all());
+        return $product;
     }
 
     /**
@@ -68,7 +68,20 @@ class NotesController extends Controller
      */
     public function destroy($id)
     {
-        Notes::destroy($id);
-        //delete a note
+        Products::destroy($id);
+        return [ "Message" => "Success"];
+    }
+
+    /**
+     * Search a resource by its name from storage.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Http\Response
+     */
+    public function search($name)
+    {
+        //For the exact name that would be
+        //'name', $name
+        return  Products::where('name', 'like', '%'.$name.'%')->get();
     }
 }

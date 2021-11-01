@@ -1,11 +1,12 @@
 <?php
 
-use App\Models\Post;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostsApiController;
-use App\Models\Notes;
-use App\Http\Controllers\NotesController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Sanctum;
+use PharIo\Manifest\Author;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +35,32 @@ Route::delete('/posts/{post}', [PostsApiController::class, 'destroy']);
 // Route::post('/notes', 'NotesController@store');
 // Route::put('/notes', 'NotesController@update');
 // Route::delete('/notes', 'NotesController@delete');
-
 Route::resource('notes', 'NotesController');
+
+//Third tutorial API with authentication
+//What i've would dont by my self, spliting the routes into
+//2 group using de ::resource method ->middleware('auth') for the
+//privates one (that are inside the resource scope)
+
+//Public routes
+//Route::resource('products', 'ProductController');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/search/{name}', [ProductController::class, 'search']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+
+//Protected routes with Sanctum authentication
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+//Route::middleware('auth:sanctum')->get('/products/search/{name}', [ProductController::class, 'search']);
+
+//OR could use but this one seems nastier to me
+// Route::group(['middleware' => ['auth:sanctum']], function() {
+//     Route::get('/products/search/{name}', [ProductController::class, 'search']);
+// });
