@@ -16,4 +16,8 @@ class Products extends Model
         'price',
         'imgurl'
     ];
+
+    protected $cast = [
+        'price' => 'decimal'
+    ];
 }
